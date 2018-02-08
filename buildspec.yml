@@ -3,9 +3,9 @@ version: 0.1
 phases:
     build:
         commands:
-            - Nothing to do yet
+            - echo Nothing to do yet
             
 artifacts:
     files:
-        index.html
-        error.html
+        - index.html
+        - error.html
