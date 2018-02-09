@@ -7,7 +7,7 @@ import mimetypes
 s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
 
 website_bucket = s3.Bucket('www.markmolesworth.com')
-build_bucket = s3.Bucket('www.markmolesworth.com-build')
+build_bucket = s3.Bucket('build.markmolesworth.com')
 
 website_zip = StringIO.StringIO()
 build_bucket.download_fileobj('markmolesworth.zip', website_zip)
