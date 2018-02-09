@@ -1,5 +1,8 @@
-import boto3 from botocore.client
-import Configimport StringIOimport zipfileimport mimetypes
+import boto3
+from botocore.client import Config
+import StringIO
+import zipfile
+import mimetypes
 
 def lambda_handler(event, context):
     sns = boto3.resource('sns')
@@ -15,8 +18,8 @@ def lambda_handler(event, context):
         
         if job:
             for artifact in job["data"]["artifacts"]:
-                if artifact["name"] = "MyAppBuild":
-                location = artifact["location"]["s3Location"]
+                if artifact["name"] == "MyAppBuild":
+                    location = artifact["location"]["s3Location"]
         
         print("Building markmolesworth from " + str(location))
         
@@ -35,15 +38,15 @@ def lambda_handler(event, context):
                 website_bucket.Object(nm).Acl().put(ACL='public-read')
             topic.publish(Subject="markmolesworth deployment successfull", Message="markmolesworth deployment successfull")
         
-    print("markmolesworth deployment successfull.")
-    if job:
-        codepipeline = boto3.client("codepipeline")
-        codepipeline.put_job_success_result(jobId=job["id"])
-        
+        print "markmolesworth deployment successfull."
+    
+        if job:
+            codepipeline = boto3.client("codepipeline")
+            codepipeline.put_job_success_result(jobId=job["id"])
+
+    except:
+        topic.publish(Subject="markmolesworth deployment failed.", Message="markmolesworth deployment failed.")
+        raise
+
+
     return 'markmolesworth.com deployed successfully.' 
-
-except:
-    topic.publish(Subject="markmolesworth deployment failed.", Message="markmolesworth deployment failed.")
-    raise
-
-
