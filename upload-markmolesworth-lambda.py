@@ -8,7 +8,7 @@ def lambda_handler(event, context):
     sns = boto3.resource('sns')
     topic = sns.Topic('arn:aws:sns:us-east-1:176749210898:deploy-markmolesworth-topic')
 
-    locatin = {
+    location = {
         "bucketName": 'build.markmolesworth.com',
         "objectKey": 'markmolesworth.zip'
     }
@@ -17,11 +17,10 @@ def lambda_handler(event, context):
         job = event.get("CodePipeline.job")
         
         if job:
-            for artifact in job["data"]["artifacts"]:
+            for artifact in job["data"]["inputArtifacts"]:
                 if artifact["name"] == "MyAppBuild":
                     location = artifact["location"]["s3Location"]
-        
-        print("Building markmolesworth from " + str(location))
+                    print "Building markmolesworth from " + str(location)
         
         
         s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
