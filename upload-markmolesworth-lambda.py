@@ -5,12 +5,27 @@ def lambda_handler(event, context):
     sns = boto3.resource('sns')
     topic = sns.Topic('arn:aws:sns:us-east-1:176749210898:deploy-markmolesworth-topic')
 
+    locatin = {
+        "bucketName": 'build.markmolesworth.com',
+        "objectKey": 'markmolesworth.zip'
+    }
+    
     try:
+        job = event.get("CodePipeline.job")
+        
+        if job:
+            for artifact in job["data"]["artifacts"]:
+                if artifact["name"] = "MyAppBuild":
+                location = artifact["location"]["s3Location"]
+        
+        print("Building markmolesworth from " + str(location))
+        
+        
         s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
         website_bucket = s3.Bucket('www.markmolesworth.com')
-        build_bucket = s3.Bucket('build.markmolesworth.com')
+        build_bucket = s3.Bucket(location["bucketName"])
         website_zip = StringIO.StringIO()
-        build_bucket.download_fileobj('markmolesworth.zip', website_zip)
+        build_bucket.download_fileobj(location["objectKey"], website_zip)
     
         with zipfile.ZipFile(website_zip) as myzip:
             for nm in myzip.namelist():
@@ -21,8 +36,13 @@ def lambda_handler(event, context):
             topic.publish(Subject="markmolesworth deployment successfull", Message="markmolesworth deployment successfull")
         
     print("markmolesworth deployment successfull.")
-    return 'markmolesworth.com deployed successfully.'
+    if job:
+        codepipeline = boto3.client("codepipeline")
+        codepipeline.put_job_success_result(jobId=job["id"])
 
 except:
     topic.publish(Subject="markmolesworth deployment failed.", Message="markmolesworth deployment failed.")
     raise
+
+
+    return 'markmolesworth.com deployed successfully.'
