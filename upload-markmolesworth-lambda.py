@@ -39,10 +39,11 @@ def lambda_handler(event, context):
     if job:
         codepipeline = boto3.client("codepipeline")
         codepipeline.put_job_success_result(jobId=job["id"])
+        
+    return 'markmolesworth.com deployed successfully.' 
 
 except:
     topic.publish(Subject="markmolesworth deployment failed.", Message="markmolesworth deployment failed.")
     raise
 
 
-    return 'markmolesworth.com deployed successfully.'
