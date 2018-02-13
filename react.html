@@ -18,7 +18,24 @@
         
         <script type="text/babel" data-presets="react">
             
-            ReactDOM.render(<div>Hello, World!</div>, document.getElementById('content'));
+            class NameInput extends ReactComponent {
+                
+                render() {
+                    return (
+                        
+                        <div>
+                            <label>Name: <input type="text"/></label>
+                            <button>Click me!</button>
+                        
+                        </div>
+                        
+                        )
+                }
+                
+            }
+            
+            
+            ReactDOM.render(<NameInput/>, document.getElementById('content'));
             
         </script>
         

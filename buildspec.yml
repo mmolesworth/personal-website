@@ -10,3 +10,4 @@ artifacts:
         - index.html
         - error.html
         - babel.html
+        - react.html
