@@ -5,7 +5,6 @@ phases:
         commands:
             - npm install
             - npm run webpack
-            - 
             
 artifacts:
     files:
