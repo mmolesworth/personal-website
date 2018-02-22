@@ -13,3 +13,4 @@ artifacts:
         - babel.html
         - react.html
         - dist/bundle.js
+        - favicon.ico
